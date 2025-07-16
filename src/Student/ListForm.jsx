@@ -1,5 +1,9 @@
 import { useSelector, useDispatch } from "react-redux";
-import { deleteStudent, getIdStudent } from "./../store/studentreducer";
+import {
+  deleteStudent,
+  getIdStudent,
+  showBtn,
+} from "./../store/studentreducer";
 
 export default function ListForm() {
   const dispatch = useDispatch();
@@ -46,7 +50,13 @@ export default function ListForm() {
                   <a
                     href="#infoStudent"
                     className="font-medium text-blue-600 inline-block  hover:underline"
-                    onClick={() => dispatch(getIdStudent(item))}
+                    onClick={() =>
+                      // dispatch(getIdStudent({ data: item, isEditBtn: true }))
+                      {
+                        dispatch(getIdStudent(item));
+                        dispatch(showBtn(true));
+                      }
+                    }
                   >
                     Edit
                   </a>

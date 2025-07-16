@@ -8,6 +8,7 @@ const jsonData = [
 const initialState = {
   dataList: jsonData || [],
   dataObj: {},
+  isEditBtn: false,
 };
 
 export const studentSlice = createSlice({
@@ -37,11 +38,14 @@ export const studentSlice = createSlice({
           : item;
       });
     },
+    showBtn: (state, action) => {
+      state.isEditBtn = action.payload;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { addStudent, deleteStudent, getIdStudent, editStudent } =
+export const { addStudent, deleteStudent, getIdStudent, editStudent, showBtn } =
   studentSlice.actions;
 
 export default studentSlice.reducer;

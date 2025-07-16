@@ -1,35 +1,82 @@
 import { useDispatch, useSelector } from "react-redux";
-import { addStudent, editStudent } from "./../store/studentreducer";
+import { addStudent, editStudent, showBtn } from "./../store/studentreducer";
 import { useState, useEffect } from "react";
 
 import Student from "./student";
 
 export default function InputForm() {
   const dataObj = useSelector((state) => state.student.dataObj);
-
+  const isShowEdit = useSelector((state) => state.student.isEditBtn);
   const dispatch = useDispatch();
-  const [idVal, setIdVal] = useState("");
-  const [nameVal, setNameVal] = useState("");
-  const [phoneVal, setPhoneVal] = useState("");
-  const [emailVal, setEmailVal] = useState("");
+
+  const [formData, setFormData] = useState({
+    id: "",
+    name: "",
+    phone: "",
+    email: "",
+  });
+  const [validation, setValidation] = useState({
+    values: {
+      id: "",
+      name: "",
+    },
+    error: {
+      id: "",
+      name: "",
+    },
+  });
 
   const handleAddStudent = () => {
-    const studentObj = new Student(idVal, nameVal, phoneVal, emailVal);
+    const { id, name, phone, email } = formData;
+    const studentObj = new Student(id, name, phone, email);
     dispatch(addStudent({ ...studentObj }));
+    setFormData({
+      id: "",
+      name: "",
+      phone: "",
+      email: "",
+    });
   };
   const handleEditStudent = () => {
-    const studentObj = new Student(idVal, nameVal, phoneVal, emailVal);
+    const { id, name, phone, email } = formData;
+    const studentObj = new Student(id, name, phone, email);
     dispatch(editStudent({ ...studentObj }));
+    dispatch(showBtn(false));
+    setFormData({
+      id: "",
+      name: "",
+      phone: "",
+      email: "",
+    });
   };
 
   useEffect(() => {
     if (dataObj) {
-      setIdVal(dataObj.id || "");
-      setNameVal(dataObj.name || "");
-      setPhoneVal(dataObj.phone || "");
-      setEmailVal(dataObj.email || "");
+      setFormData({
+        id: dataObj.id || "",
+        name: dataObj.name || "",
+        phone: dataObj.phone || "",
+        email: dataObj.email || "",
+      });
     }
   }, [dataObj]);
+
+  const handleValue = (e) => {
+    const { name, value } = e.target;
+
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+
+    setValidation({
+      ...validation,
+      values: {
+        ...validation.values,
+        [name]: value,
+      },
+    });
+  };
 
   return (
     <div className="mb-14" id="infoStudent">
@@ -93,11 +140,11 @@ export default function InputForm() {
             <input
               type="text"
               id="idSV"
+              name="id"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
               placeholder="maSV"
-              // required
-              onChange={(e) => setIdVal(e.target.value)}
-              value={idVal}
+              onChange={handleValue}
+              value={formData.id}
             />
           </div>
           <div>
@@ -110,11 +157,11 @@ export default function InputForm() {
             <input
               type="text"
               id="name"
+              name="name"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
               placeholder="Nguyễn Văn B"
-              // required
-              onChange={(e) => setNameVal(e.target.value)}
-              value={nameVal}
+              onChange={handleValue}
+              value={formData.name}
             />
           </div>
           <div>
@@ -127,12 +174,11 @@ export default function InputForm() {
             <input
               type="tel"
               id="phone"
+              name="phone"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
               placeholder="123-45-678"
-              //   pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
-              // required
-              onChange={(e) => setPhoneVal(e.target.value)}
-              value={phoneVal}
+              onChange={handleValue}
+              value={formData.phone}
             />
           </div>
           <div>
@@ -145,30 +191,34 @@ export default function InputForm() {
             <input
               type="email"
               id="email"
+              name="email"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
               placeholder="nguyenvanb@gmail.com"
-              // required
-              onChange={(e) => setEmailVal(e.target.value)}
-              value={emailVal}
+              onChange={handleValue}
+              value={formData.email}
             />
           </div>
         </div>
 
         <div className="flex gap-7">
-          <button
-            onClick={handleAddStudent}
-            type="submit"
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm w-[28%] px-5 py-2.5 text-center "
-          >
-            Thêm sinh viên
-          </button>
-          <button
-            onClick={handleEditStudent}
-            type="submit"
-            className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm w-[28%] px-5 py-2.5 text-center "
-          >
-            Sửa sinh viên
-          </button>
+          {!isShowEdit && (
+            <button
+              onClick={handleAddStudent}
+              type="submit"
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm w-[28%] px-5 py-2.5 text-center "
+            >
+              Thêm sinh viên
+            </button>
+          )}
+          {isShowEdit && (
+            <button
+              onClick={handleEditStudent}
+              type="submit"
+              className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm w-[28%] px-5 py-2.5 text-center "
+            >
+              Sửa sinh viên
+            </button>
+          )}
         </div>
       </form>
     </div>
