@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 const jsonData = [
   { id: 1, name: "thanhLV", phone: "0123", email: "abc@gmail.com" },
-  { id: 2, name: "thanhLV2", phone: "456", email: "abc2@gmail.com" },
+  { id: 2, name: "hasqwe", phone: "456", email: "abc2@gmail.com" },
   { id: 3, name: "thanhLV3", phone: "678", email: "abc3@gmail.com" },
 ];
 
 const initialState = {
-  dataList: jsonData || [],
+  dataList: [],
   dataObj: {},
   isEditBtn: false,
 };
