@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { addStudent, editStudent, showBtn } from "./../store/studentreducer";
+import { addStudent, editStudent, showBtn } from "./../store/studentReducer";
 import { useState, useEffect } from "react";
 
 import Student from "./student";

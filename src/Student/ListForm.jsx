@@ -5,7 +5,7 @@ import {
   deleteStudent,
   getIdStudent,
   showBtn,
-} from "./../store/studentreducer";
+} from "./../store/studentReducer";
 
 export default function ListForm() {
   const dispatch = useDispatch();
